@@ -10,6 +10,7 @@
     <Product />
     <PackageProjectUrl>https://github.com/iozcelik/EntityFrameworkCore.SqlServer.JsonExtention</PackageProjectUrl>
     <RepositoryUrl>https://github.com/iozcelik/EntityFrameworkCore.SqlServer.JsonExtention</RepositoryUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,6 +28,13 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
