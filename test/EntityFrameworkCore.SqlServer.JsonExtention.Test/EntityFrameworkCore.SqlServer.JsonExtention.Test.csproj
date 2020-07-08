@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\EntityFrameworkCore.SqlServer.JsonExtention\EntityFrameworkCore.SqlServer.JsonExtention.csproj" />
+    <ProjectReference Include="..\..\src\EntityFrameworkCore.SqlServer.JsonExtention\EntityFrameworkCore.SqlServer.JsonExtention.csproj" />
   </ItemGroup>
 
 </Project>
