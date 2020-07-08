@@ -8,6 +8,8 @@
     <Authors>İsmail Özçelik</Authors>
     <Company />
     <Product />
+    <PackageProjectUrl>https://github.com/iozcelik/EntityFrameworkCore.SqlServer.JsonExtention</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/iozcelik/EntityFrameworkCore.SqlServer.JsonExtention</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
