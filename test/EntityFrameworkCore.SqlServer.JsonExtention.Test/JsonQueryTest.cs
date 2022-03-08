@@ -5,26 +5,32 @@ using System.Linq;
 using System.Text.Json;
 using Xunit;
 
-namespace EntityFrameworkCore.SqlServer.JsonExtention.Test {
-    public class JsonQueryTest : TestBase {
-        [Fact]
-        public void JsonQuery_SelectJsonArrayValue_ShouldReturnArray() {
-            var entityId = 1;
+namespace EntityFrameworkCore.SqlServer.JsonExtention.Test; 
+public class JsonQueryTest : IClassFixture<TestDatabaseFixture>
+{
+    public JsonQueryTest(TestDatabaseFixture fixture)
+       => Fixture = fixture;
 
-            var result = _context.Customers.Where(w => w.Id == entityId).Select(s => EF.Functions.JsonQuery(s.LuckyNumbers)).FirstOrDefault();
+    public TestDatabaseFixture Fixture { get; }
+    [Fact]
+    public void JsonQuery_SelectJsonArrayValue_ShouldReturnArray() {
+        var entityId = 1;
 
-            result.ShouldBe("[3,8,15]");
-        }
+        using var _context = Fixture.CreateContext();
+        var result = _context.Customers.Where(w => w.Id == entityId).Select(s => EF.Functions.JsonQuery(s.UtcTimeZones)).FirstOrDefault();
 
-        [Fact]
-        public void JsonQuery_SelectNestedJsonArrayValueConvertObject_ShouldReturnIstanbul() {
-            var entityId = 1;
+        result.ShouldBe("[3]");
+    }
 
-            var result = _context.Customers.Where(w => w.Id == entityId).Select(s => EF.Functions.JsonQuery(s.Company, "Branches")).FirstOrDefault();
+    [Fact]
+    public void JsonQuery_SelectNestedJsonArrayValueConvertObject_ShouldReturnIstanbul() {
+        var entityId = 1;
 
-            var branches = JsonSerializer.Deserialize<List<Branch>>(result);
+        using var _context = Fixture.CreateContext();
+        var result = _context.Customers.Where(w => w.Id == entityId).Select(s => EF.Functions.JsonQuery(s.CountryDetail, "Cities")).FirstOrDefault();
 
-            branches.FirstOrDefault(f => f.Code == 34).City.ShouldBe("Istanbul");
-        }
+        var cities = JsonSerializer.Deserialize<List<City>>(result);
+
+        cities.FirstOrDefault(f => f.Population == 15840900).Name.ShouldBe("Istanbul");
     }
 }

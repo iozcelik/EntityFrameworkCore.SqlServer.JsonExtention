@@ -3,51 +3,60 @@ using Shouldly;
 using System.Linq;
 using Xunit;
 
-namespace EntityFrameworkCore.SqlServer.JsonExtention.Test {
-    public class JsonValueTest : TestBase {
-        [Fact]
-        public void JsonValue_SelectJsonPropertyValue_ShouldReturnJohnsBank() {
-            var entityId = 1;
+namespace EntityFrameworkCore.SqlServer.JsonExtention.Test; 
+public class JsonValueTest : IClassFixture<TestDatabaseFixture> {
+    public JsonValueTest(TestDatabaseFixture fixture)
+       => Fixture = fixture;
 
-            var result = _context.Customers.Where(w => w.Id == entityId).Select(s => EF.Functions.JsonValue(s.Company, "Name")).FirstOrDefault();
+    public TestDatabaseFixture Fixture { get; }
 
-            result.ShouldBe("John's Bank");
-        }
+    [Fact]
+    public void JsonValue_SelectJsonPropertyValue_ShouldReturnJohnsBank() {
+        var entityId = 1;
 
-        [Fact]
-        public void JsonValue_SelectJsonArrayValue_ShouldReturnStringThree() {
-            var entityId = 1;
+        using var _context = Fixture.CreateContext();
+        var result = _context.Customers.Where(w => w.Id == entityId).Select(s => EF.Functions.JsonValue(s.CountryDetail, "Code")).FirstOrDefault();
 
-            var result = _context.Customers.Where(w => w.Id == entityId).Select(s => EF.Functions.JsonValue(s.LuckyNumbers, 0)).FirstOrDefault();
+        result.ShouldBe("TR");
+    }
 
-            result.ShouldBe("3");
-        }
+    [Fact]
+    public void JsonValue_SelectJsonArrayValue_ShouldReturnStringThree() {
+        var entityId = 1;
+        using var _context = Fixture.CreateContext();
 
-        [Fact]
-        public void JsonValue_SelectDictionaryValue_ShouldReturnStringPhoneNumber() {
-            var entityId = 1;
+        var result = _context.Customers.Where(w => w.Id == entityId).Select(s => EF.Functions.JsonValue(s.UtcTimeZones, 0)).FirstOrDefault();
 
-            var result = _context.Customers.Where(w => w.Id == entityId).Select(s => EF.Functions.JsonValue(s.ContactDetail, "Phone")).FirstOrDefault();
+        result.ShouldBe("3");
+    }
 
-            result.ShouldBe("123456789");
-        }
+    [Fact]
+    public void JsonValue_SelectDictionaryValue_ShouldReturnStringPhoneNumber() {
+        var entityId = 1;
 
-        [Fact]
-        public void JsonValue_SelectAllJsonArrayValue_ShouldReturnOneNull() {
-            var result = _context.Customers.Select(s => EF.Functions.JsonValue(s.LuckyNumbers, 0)).ToList();
+        using var _context = Fixture.CreateContext();
+        var result = _context.Customers.Where(w => w.Id == entityId).Select(s => EF.Functions.JsonValue(s.ExtraInformation, "InternetTLD")).FirstOrDefault();
 
-            result.Count(c => c == null).ShouldBe(1);
-        }
+        result.ShouldBe(".tr");
+    }
 
-        [Fact]
-        public void JsonValue_WhereDictionaryValueAndSelectAndOrderByDescending_ShouldReturnOneNull() {
-            var result = _context.Customers
-                .Where(w => EF.Functions.JsonValue(w.ContactDetail, "Phone") != null)
-                .OrderByDescending(o => EF.Functions.JsonValue(o.ContactDetail, "Phone"))
-                .Select(s => EF.Functions.JsonValue(s.ContactDetail, "Phone"))
-                .ToList();
+    [Fact]
+    public void JsonValue_SelectAllJsonArrayValue_ShouldReturnOneNull() {
+        using var _context = Fixture.CreateContext();
+        var result = _context.Customers.Select(s => EF.Functions.JsonValue(s.UtcTimeZones, 0)).ToList();
 
-            result.FirstOrDefault().ShouldBe("985236471");
-        }
+        result.Count(c => c == null).ShouldBe(1);
+    }
+
+    [Fact]
+    public void JsonValue_WhereDictionaryValueAndSelectAndOrderByDescending_ShouldReturnOneNull() {
+        using var _context = Fixture.CreateContext();
+        var result = _context.Customers
+            .Where(w => EF.Functions.JsonValue(w.ExtraInformation, "InternetTLD") != null)
+            .OrderByDescending(o => EF.Functions.JsonValue(o.ExtraInformation, "InternetTLD"))
+            .Select(s => EF.Functions.JsonValue(s.ExtraInformation, "InternetTLD"))
+            .ToList();
+
+        result.FirstOrDefault().ShouldBe(".us");
     }
 }

@@ -1,25 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace EntityFrameworkCore.SqlServer.JsonExtention {
-    public class Customer {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public Company Company { get; set; }
-        public Dictionary<string,object> ContactDetail { get; set; }
-        public List<string> MenuItems { get; set; }
-        public List<int> LuckyNumbers { get; set; }
-    }
+namespace EntityFrameworkCore.SqlServer.JsonExtention;
+public class Country
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public CountryDetail CountryDetail { get; set; }
+    public Dictionary<string, object> ExtraInformation { get; set; }
+    public List<string> OfficialLanguages { get; set; }
+    public List<int> UtcTimeZones { get; set; }
+}
 
-    public class Company {
-        public string Name { get; set; }
-        public DateTime? FoundDate { get; set; }
-        public List<Branch> Branches { get; set; }
-    }
+public class CountryDetail
+{
+    public string Code { get; set; }
+    public DateTime? Founded { get; set; }
+    public List<City> Cities { get; set; }
+}
 
-    public class Branch {
-        public string Name { get; set; }
-        public string City { get; set; }
-        public int? Code { get; set; }
-    }
+public class City
+{
+    public string Name { get; set; }
+    public DateTime? Founded { get; set; }
+    public int? Population { get; set; }
 }

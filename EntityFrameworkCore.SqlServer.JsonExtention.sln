@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30204.135
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFrameworkCore.SqlServer.JsonExtention", "src\EntityFrameworkCore.SqlServer.JsonExtention\EntityFrameworkCore.SqlServer.JsonExtention.csproj", "{95CE6E5A-2875-498C-9C36-80C8B788A88B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntityFrameworkCore.SqlServer.JsonExtention", "src\EntityFrameworkCore.SqlServer.JsonExtention\EntityFrameworkCore.SqlServer.JsonExtention.csproj", "{95CE6E5A-2875-498C-9C36-80C8B788A88B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFrameworkCore.SqlServer.JsonExtention.Test", "test\EntityFrameworkCore.SqlServer.JsonExtention.Test\EntityFrameworkCore.SqlServer.JsonExtention.Test.csproj", "{805BBFD5-7551-4C99-8FCB-42CC05C74D93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntityFrameworkCore.SqlServer.JsonExtention.Test", "test\EntityFrameworkCore.SqlServer.JsonExtention.Test\EntityFrameworkCore.SqlServer.JsonExtention.Test.csproj", "{805BBFD5-7551-4C99-8FCB-42CC05C74D93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
