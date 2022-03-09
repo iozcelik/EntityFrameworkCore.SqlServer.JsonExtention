@@ -4,13 +4,14 @@
     <TargetFramework>net6.0</TargetFramework>
     <OutputType>Library</OutputType>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Description>Support MsSql 2016 Json column function to working with Entity Framework Core 3.1</Description>
+    <Description>Support MsSql 2016 Json column function to working with Entity Framework Core 6.0</Description>
     <Authors>İsmail Özçelik</Authors>
     <Company />
     <Product />
     <PackageProjectUrl>https://github.com/iozcelik/EntityFrameworkCore.SqlServer.JsonExtention</PackageProjectUrl>
     <RepositoryUrl>https://github.com/iozcelik/EntityFrameworkCore.SqlServer.JsonExtention</RepositoryUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Version>2.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
