@@ -1,4 +1,4 @@
-MsSql Json Extention for Entity Framework Core 3
+MsSql Json Extention for Entity Framework Core 6
 ======================
 
 This extention aim is define json columns and querying them.
@@ -23,7 +23,7 @@ protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
 Using Fluent api in model builder and just call HasJsonConversion() method.
 
 ```csharp
-modelBuilder.Entity<Customer>().Property(p => p.Company).HasJsonConversion();
+modelBuilder.Entity<Country>().Property(p => p.Company).HasJsonConversion();
 ```
 
 #### Supported Conversion 
@@ -31,32 +31,35 @@ The library supports List<>, Dictionary<string,object> and custom entity types.
 
 Example entities:
 ```csharp
-public class Customer {
+public class Country
+{
     public int Id { get; set; }
     public string Name { get; set; }
-    public Company Company { get; set; }
-    public Dictionary<string,object> ContactDetail { get; set; }
-    public List<string> MenuItems { get; set; }
-    public List<int> LuckyNumbers { get; set; }
- }
-
-public class Company {
-    public string Name { get; set; }
-    public DateTime? FoundDate { get; set; }
-    public List<Branch> Branches { get; set; }
+    public CountryDetail CountryDetail { get; set; }
+    public Dictionary<string, object> ExtraInformation { get; set; }
+    public List<string> OfficialLanguages { get; set; }
+    public List<int> UtcTimeZones { get; set; }
 }
 
-public class Branch {
+public class CountryDetail
+{
+    public string Code { get; set; }
+    public DateTime? Founded { get; set; }
+    public List<City> Cities { get; set; }
+}
+
+public class City
+{
     public string Name { get; set; }
-    public string City { get; set; }
-    public int? Code { get; set; }
+    public DateTime? Founded { get; set; }
+    public int? Population { get; set; }
 }
 ```
 
 And usage in dbcontext:
 ```csharp
 public class TestContext : DbContext {
-    public DbSet<Customer> Customers { get; set; }
+    public DbSet<Country> Countries { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
         base.OnConfiguring(optionsBuilder);
@@ -67,10 +70,10 @@ public class TestContext : DbContext {
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
-        modelBuilder.Entity<Customer>().Property(p => p.Company).HasJsonConversion();
-        modelBuilder.Entity<Customer>().Property(p => p.ContactDetail).HasJsonConversion();
-        modelBuilder.Entity<Customer>().Property(p => p.LuckyNumbers).HasJsonConversion();
-        modelBuilder.Entity<Customer>().Property(p => p.MenuItems).HasJsonConversion();
+        modelBuilder.Entity<Country>().Property(p => p.CountryDetail).HasJsonConversion();
+        modelBuilder.Entity<Country>().Property(p => p.ExtraInformation).HasJsonConversion();
+        modelBuilder.Entity<Country>().Property(p => p.UtcTimeZones).HasJsonConversion();
+        modelBuilder.Entity<Country>().Property(p => p.OfficialLanguages).HasJsonConversion();
     }
 }
 ```
@@ -86,49 +89,44 @@ JSON_QUERY: Extracts an object or an array from a JSON string.
 
 #### ISJSON
 ```csharp
-var isJsons = _context.Customers.Select(s => EF.Functions.IsJson(s.Company)).ToList();
+var isJsons = _context.Countries.Select(s => EF.Functions.IsJson(s.CountryDetail)).ToList();
 ```
 
 Generated SQL query
 ```sql
-SELECT ISJSON([c].[Company])
-FROM [Customers] AS [c]
+SELECT ISJSON([c].[CountryDetail])
+FROM [Countries] AS [c]
 ```
 
 #### JSON_VALUE
 ```csharp
-var phones = _context.Customers
-                .Where(w => EF.Functions.JsonValue(w.ContactDetail, "Phone") != null)
-                .OrderByDescending(o => EF.Functions.JsonValue(o.ContactDetail, "Phone"))
-                .Select(s => EF.Functions.JsonValue(s.ContactDetail, "Phone"))
+var phones = _context.Countries
+                .Where(w => EF.Functions.JsonValue(w.ExtraInformation, "InternetTLD") != null)
+                .OrderByDescending(o => EF.Functions.JsonValue(o.ExtraInformation, "InternetTLD"))
+                .Select(s => EF.Functions.JsonValue(s.ExtraInformation, "InternetTLD"))
                 .ToList();
 ```
 
 Generated SQL query
 ```sql
-SELECT JSON_VALUE([c].[ContactDetail], '$.Phone')
-FROM [Customers] AS [c]
-WHERE JSON_VALUE([c].[ContactDetail], '$.Phone') IS NOT NULL
-ORDER BY JSON_VALUE([c].[ContactDetail], '$.Phone') DESC
+SELECT JSON_VALUE([c].[ExtraInformation], '$.InternetTLD')
+FROM [Countries] AS [c]
+WHERE JSON_VALUE([c].[ExtraInformation], '$.InternetTLD') IS NOT NULL
+ORDER BY JSON_VALUE([c].[ExtraInformation], '$.InternetTLD') DESC
 ```
 
 #### JSON_QUERY
 ```csharp
 var entityId = 1;
 
-var result = _context.Customers.Where(w => w.Id == entityId).Select(s => EF.Functions.JsonQuery(s.Company, "Branches")).FirstOrDefault();
+var result = _context.Countries.Where(w => w.Id == entityId).Select(s => EF.Functions.JsonQuery(s.CountryDetail, "Cities")).FirstOrDefault();
 
-var branches = JsonSerializer.Deserialize<List<Branch>>(result);
+var cities = JsonSerializer.Deserialize<List<City>>(result);
 ```
 
 Generated SQL query
 ```sql
-SELECT TOP(1) JSON_QUERY([c].[Company], '$.Branches')
-FROM [Customers] AS [c]
+SELECT TOP(1) JSON_QUERY([c].[CountryDetail], '$.Cities')
+FROM [Countries] AS [c]
 WHERE [c].[Id] = 1
 ```
-
-### RoadMap
-- Add to lambda expression to nested json object
-- Return type may match to entity type. (At this time only string return avaible)
-- JSON_MODIFY function implementation
