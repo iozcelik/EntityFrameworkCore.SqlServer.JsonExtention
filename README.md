@@ -28,7 +28,7 @@ protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
 Using Fluent api in model builder and just call HasJsonConversion() method.
 
 ```csharp
-modelBuilder.Entity<Country>().Property(p => p.Company).HasJsonConversion();
+modelBuilder.Entity<Country>().Property(p => p.CountryDetail).HasJsonConversion();
 ```
 
 #### Supported Conversion 
