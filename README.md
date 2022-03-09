@@ -3,7 +3,12 @@ MsSql Json Extention for Entity Framework Core 6
 
 This extention aim is define json columns and querying them.
 
-### Get it
+### Get it for .Net 6
+```
+PM> Install-Package EntityFrameworkCore.SqlServer.JsonExtention -Version 2.0.0
+```
+
+### Get it for .Net 3.1
 ```
 PM> Install-Package EntityFrameworkCore.SqlServer.JsonExtention -Version 1.0.0
 ```
