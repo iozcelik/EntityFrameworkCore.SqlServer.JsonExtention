@@ -17,7 +17,7 @@ public class JsonQueryTest : IClassFixture<TestDatabaseFixture>
         var entityId = 1;
 
         using var _context = Fixture.CreateContext();
-        var result = _context.Customers.Where(w => w.Id == entityId).Select(s => EF.Functions.JsonQuery(s.UtcTimeZones)).FirstOrDefault();
+        var result = _context.Countries.Where(w => w.Id == entityId).Select(s => EF.Functions.JsonQuery(s.UtcTimeZones)).FirstOrDefault();
 
         result.ShouldBe("[3]");
     }
@@ -27,7 +27,7 @@ public class JsonQueryTest : IClassFixture<TestDatabaseFixture>
         var entityId = 1;
 
         using var _context = Fixture.CreateContext();
-        var result = _context.Customers.Where(w => w.Id == entityId).Select(s => EF.Functions.JsonQuery(s.CountryDetail, "Cities")).FirstOrDefault();
+        var result = _context.Countries.Where(w => w.Id == entityId).Select(s => EF.Functions.JsonQuery(s.CountryDetail, "Cities")).FirstOrDefault();
 
         var cities = JsonSerializer.Deserialize<List<City>>(result);
 

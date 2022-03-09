@@ -7,7 +7,7 @@ public class TestContext : DbContext
     {
     }
 
-    public DbSet<Country> Customers { get; set; }
+    public DbSet<Country> Countries { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

@@ -15,7 +15,7 @@ public class JsonValueTest : IClassFixture<TestDatabaseFixture> {
         var entityId = 1;
 
         using var _context = Fixture.CreateContext();
-        var result = _context.Customers.Where(w => w.Id == entityId).Select(s => EF.Functions.JsonValue(s.CountryDetail, "Code")).FirstOrDefault();
+        var result = _context.Countries.Where(w => w.Id == entityId).Select(s => EF.Functions.JsonValue(s.CountryDetail, "Code")).FirstOrDefault();
 
         result.ShouldBe("TR");
     }
@@ -25,7 +25,7 @@ public class JsonValueTest : IClassFixture<TestDatabaseFixture> {
         var entityId = 1;
         using var _context = Fixture.CreateContext();
 
-        var result = _context.Customers.Where(w => w.Id == entityId).Select(s => EF.Functions.JsonValue(s.UtcTimeZones, 0)).FirstOrDefault();
+        var result = _context.Countries.Where(w => w.Id == entityId).Select(s => EF.Functions.JsonValue(s.UtcTimeZones, 0)).FirstOrDefault();
 
         result.ShouldBe("3");
     }
@@ -35,7 +35,7 @@ public class JsonValueTest : IClassFixture<TestDatabaseFixture> {
         var entityId = 1;
 
         using var _context = Fixture.CreateContext();
-        var result = _context.Customers.Where(w => w.Id == entityId).Select(s => EF.Functions.JsonValue(s.ExtraInformation, "InternetTLD")).FirstOrDefault();
+        var result = _context.Countries.Where(w => w.Id == entityId).Select(s => EF.Functions.JsonValue(s.ExtraInformation, "InternetTLD")).FirstOrDefault();
 
         result.ShouldBe(".tr");
     }
@@ -43,7 +43,7 @@ public class JsonValueTest : IClassFixture<TestDatabaseFixture> {
     [Fact]
     public void JsonValue_SelectAllJsonArrayValue_ShouldReturnOneNull() {
         using var _context = Fixture.CreateContext();
-        var result = _context.Customers.Select(s => EF.Functions.JsonValue(s.UtcTimeZones, 0)).ToList();
+        var result = _context.Countries.Select(s => EF.Functions.JsonValue(s.UtcTimeZones, 0)).ToList();
 
         result.Count(c => c == null).ShouldBe(1);
     }
@@ -51,7 +51,7 @@ public class JsonValueTest : IClassFixture<TestDatabaseFixture> {
     [Fact]
     public void JsonValue_WhereDictionaryValueAndSelectAndOrderByDescending_ShouldReturnOneNull() {
         using var _context = Fixture.CreateContext();
-        var result = _context.Customers
+        var result = _context.Countries
             .Where(w => EF.Functions.JsonValue(w.ExtraInformation, "InternetTLD") != null)
             .OrderByDescending(o => EF.Functions.JsonValue(o.ExtraInformation, "InternetTLD"))
             .Select(s => EF.Functions.JsonValue(s.ExtraInformation, "InternetTLD"))
